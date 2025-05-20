@@ -1,0 +1,284 @@
+/* Estilos generales */
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --warning-color: #ffc107;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --border-radius: 4px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+h1 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Selector de CAPTCHA */
+.captcha-selector {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.captcha-selector label {
+    font-weight: 600;
+}
+
+.captcha-selector select {
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ced4da;
+    font-size: 1rem;
+    min-width: 200px;
+}
+
+/* Contenedor del CAPTCHA */
+#captcha-container {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border: 1px dashed #ddd;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    background-color: var(--light-gray);
+}
+
+/* Mensajes de estado */
+.status-message {
+    font-weight: 600;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.message {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+/* Temporizador */
+.timer {
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Botones */
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #3a5a80;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Campos de entrada */
+input[type="text"],
+input[type="number"] {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Clases de utilidad */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+
+/* Estilos específicos para el CAPTCHA de texto */
+.text-captcha {
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    letter-spacing: 0.5rem;
+    padding: 1rem 2rem;
+    background-color: #f0f0f0;
+    border-radius: var(--border-radius);
+    user-select: none;
+}
+
+/* Estilos para el CAPTCHA de rompecabezas */
+.puzzle-captcha {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.puzzle-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    cursor: move;
+}
+
+.puzzle-bg {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0.7;
+}
+
+.puzzle-piece {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    cursor: grab;
+    transition: transform 0.1s, box-shadow 0.2s;
+    z-index: 10;
+}
+
+.puzzle-piece.dragging {
+    cursor: grabbing;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+    z-index: 100;
+}
+
+.puzzle-drop-zone {
+    position: absolute;
+    border: 2px dashed #4a90e2;
+    border-radius: 4px;
+    background-color: rgba(74, 144, 226, 0.1);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.puzzle-instructions {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.puzzle-attempts {
+    margin-top: 0.5rem;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+/* Efecto de éxito cuando la pieza está en la posición correcta */
+.puzzle-piece.correct {
+    border-color: #2ecc71;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.5);
+}
+
+/* Efecto de error cuando la pieza está en la posición incorrecta */
+.puzzle-piece.error {
+    animation: shake 0.5s;
+    border-color: #e74c3c;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .puzzle-container {
+        max-width: 100%;
+    }
+    
+    .puzzle-piece {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Estilos para el CAPTCHA de rompecabezas */
+.puzzle-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.puzzle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.puzzle-piece {
+    position: absolute;
+    cursor: move;
+    border: 2px solid white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s;
+}
+
+.puzzle-piece.dragging {
+    z-index: 100;
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.puzzle-slot {
+    position: absolute;
+    border: 2px dashed #ccc;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}

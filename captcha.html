@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de CAPTCHAs</title>
+    <link rel="stylesheet" href="./public/css/styles.css">
+    <style>
+        #captcha-container {
+            min-height: 300px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .puzzle-container {
+            position: relative;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+        .puzzle-piece {
+            position: absolute;
+            cursor: move;
+            z-index: 10;
+        }
+        .puzzle-drop-zone {
+            position: absolute;
+            border: 2px dashed #4CAF50;
+            background-color: rgba(76, 175, 80, 0.2);
+            border-radius: 5px;
+            z-index: 5;
+        }
+        .status-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prueba de CAPTCHAs</h1>
+        
+        <!-- Selector de tipo de CAPTCHA -->
+        <div class="captcha-selector">
+            <label for="captcha-type">Selecciona un tipo de CAPTCHA:</label>
+            <select id="captcha-type">
+                <option value="text">CAPTCHA de Texto</option>
+                <option value="puzzle">CAPTCHA de Rompecabezas</option>
+                <option value="emoji">CAPTCHA de Emojis</option>
+                <option value="math">CAPTCHA Matemático</option>
+            </select>
+        </div>
+
+        <!-- Contenedor del CAPTCHA -->
+        <div id="captcha-container">
+            <p>Cargando CAPTCHA...</p>
+        </div>
+
+        <!-- Estado y mensajes -->
+        <div id="captcha-status" class="status-message"></div>
+        <div id="captcha-message" class="message"></div>
+        <div id="timer" class="timer"></div>
+    </div>
+
+    <!-- Cargar los scripts en orden -->
+    <script>
+        // Añadir mensaje de depuración
+        console.log('Cargando scripts...');
+        
+        // Función para cargar scripts secuencialmente
+        function loadScript(src, callback) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => {
+                    console.log(`Script cargado: ${src}`);
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    console.error(`Error al cargar el script ${src}:`, error);
+                    reject(error);
+                };
+                document.head.appendChild(script);
+            });
+        }
+        
+        // Cargar scripts en orden
+        Promise.all([
+            loadScript('./public/js/captchas/text-captcha.js'),
+            loadScript('./public/js/captchas/puzzle-captcha.js'),
+            loadScript('./public/js/captchas/emoji-captcha.js'),
+            loadScript('./public/js/captchas/math-captcha.js')
+        ]).then(() => {
+            return loadScript('./public/js/captcha-manager.js');
+        }).then(() => {
+            console.log('Todos los scripts se cargaron correctamente');
+            // Inicializar el CAPTCHA después de cargar todos los scripts
+            const captchaType = document.getElementById('captcha-type').value;
+            if (window.captchaManager) {
+                window.captchaManager.initCaptcha(captchaType);
+            }
+        }).catch(error => {
+            console.error('Error al cargar los scripts:', error);
+            document.getElementById('captcha-container').innerHTML = 
+                '<p class="error">Error al cargar el sistema de CAPTCHAs. Por favor, recarga la página.</p>';
+        });
+    </script>
+    
+    <script>
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar el evento de cambio
+            document.getElementById('captcha-type').addEventListener('change', function() {
+                const newType = this.value;
+                if (window.captchaManager) {
+                    window.captchaManager.initCaptcha(newType);
+                }
+            });
+            
+            // Cargar el primer CAPTCHA
+            const captchaType = document.getElementById('captcha-type').value;
+            if (window.captchaManager) {
+                window.captchaManager.initCaptcha(captchaType);
+            } else {
+                console.error('No se pudo cargar el gestor de CAPTCHAs');
+                document.getElementById('captcha-container').innerHTML = 
+                    '<p class="error">Error al cargar el sistema de CAPTCHAs. Por favor, recarga la página.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
